@@ -9,6 +9,7 @@ AI-powered exoplanet candidate classification with a **FastAPI** backend and a *
 
 ## Table of Contents
 
+* [Abstract](#abstract)
 * [Demo & Overview](#demo--overview)
 * [Repository Structure](#repository-structure)
 * [Prerequisites](#prerequisites)
@@ -38,6 +39,30 @@ AI-powered exoplanet candidate classification with a **FastAPI** backend and a *
 
 ---
 
+## Abstract
+
+A World Away: AI-Powered Exoplanet Insights Platform
+
+We present an intelligent, end-to-end platform that converts NASA’s complex exoplanet datasets into actionable insights for researchers, educators, and innovators. Built around open data from **Kepler**, **K2**, and extensible to **TESS**, the system unifies data ingestion, preprocessing, interactive exploration, and AI-assisted classification to accelerate discovery and learning.
+
+**What it does.** The platform collects, cleans, and harmonizes mission data, then provides interactive dashboards, batch/stream inference, and explorable visual analytics. Users can inspect orbital and stellar features, run **predictive models** to classify candidates, and receive **ensemble consensus** with confidence scores. Real-time alerts and anomaly flags highlight unusual patterns or promising targets.
+
+**How it works.** A FastAPI backend integrates NASA and external scientific APIs, standardizes features, applies quality checks, and serves inference through a REST interface. A lightweight web UI enables non-technical users to query, visualize, and interpret results. Embedded **ML models** (tree-based and deep learning) perform pattern recognition and anomaly detection; an ensemble layer improves robustness and interpretability.
+
+**Benefits.**
+
+* **Democratizes** NASA open science by making data accessible and comprehensible.
+* **Accelerates research** with reproducible pipelines and hypothesis-driven analytics.
+* **Catalyzes innovation** for education, startups, and citizen science.
+* **Engages the public** through intuitive, interactive tools.
+
+**Tools & stack.** Python (pandas, NumPy, scikit-learn, TensorFlow), FastAPI, and JavaScript visualizations (Plotly/D3.js). Prototyping in Jupyter; collaboration via GitHub; deployable to cloud (AWS/GCP) with optional GPU acceleration.
+
+**Impact.** By bridging raw telemetry and practical understanding, this solution advances NASA’s mission of expanding knowledge for the benefit of humanity—scaling exoplanet discovery, fostering STEM engagement, and enabling data-driven exploration.
+
+
+---
+
 ## Repository Structure
 
 ```
@@ -46,6 +71,7 @@ AI-powered exoplanet candidate classification with a **FastAPI** backend and a *
 ├── main.py                     # FastAPI backend with single, all-model, and batch endpoints
 ├── requirements.txt            # Python dependencies (CPU-friendly defaults)
 ├── test_api.py                 # Local test suite for the API
+├── Models Comparison.ipynb     # Compares Multiple Models for Multiple Datasets provided by Nasa Space Apps Challenge
 └── saved_models/
     ├── metadata.json           # Informational metadata about datasets/models (read-only)
     ├── scaler_KEPLER.joblib    # Required scaler for KEPLER
