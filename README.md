@@ -27,19 +27,6 @@ AI-powered exoplanet candidate classification with a **FastAPI** backend and a *
 
 ---
 
-## Demo & Overview
-
-* **Frontend:** `index.html` (no build tools required).
-* **Backend:** `main.py` (FastAPI).
-* **Prediction flow:**
-
-  1. Choose a mission (KEPLER / K2).
-  2. Enter object parameters or **Load Sample Data**.
-  3. Run **Classify with All Models** to get per-model outputs + **Ensemble Consensus**.
-  4. Optionally upload a **CSV** for batch predictions and export JSON results.
-
----
-
 ## Abstract
 
 A World Away: AI-Powered Exoplanet Insights Platform
@@ -60,6 +47,19 @@ We present an intelligent, end-to-end platform that converts NASA’s complex ex
 **Tools & stack.** Python (pandas, NumPy, scikit-learn, TensorFlow), FastAPI, and JavaScript visualizations (Plotly/D3.js). Prototyping in Jupyter; collaboration via GitHub; deployable to cloud (AWS/GCP) with optional GPU acceleration.
 
 **Impact.** By bridging raw telemetry and practical understanding, this solution advances NASA’s mission of expanding knowledge for the benefit of humanity—scaling exoplanet discovery, fostering STEM engagement, and enabling data-driven exploration.
+
+---
+
+## Demo & Overview
+
+* **Frontend:** `index.html` (no build tools required).
+* **Backend:** `main.py` (FastAPI).
+* **Prediction flow:**
+
+  1. Choose a mission (KEPLER / K2).
+  2. Enter object parameters or **Load Sample Data**.
+  3. Run **Classify with All Models** to get per-model outputs + **Ensemble Consensus**.
+  4. Optionally upload a **CSV** for batch predictions and export JSON results.
 
 
 ---
