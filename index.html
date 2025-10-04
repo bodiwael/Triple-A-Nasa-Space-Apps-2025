@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exoplanet Classification System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        .space-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+            z-index: -1;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(100, 200, 255, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(100, 200, 255, 0.8); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        header {
+            background: rgba(10, 20, 40, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            border-bottom: 2px solid rgba(100, 200, 255, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #64b5f6, #90caf9, #42a5f5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .subtitle {
+            color: #90caf9;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .mission-select {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .mission-card {
+            background: rgba(20, 40, 80, 0.6);
+            border: 2px solid rgba(100, 200, 255, 0.3);
+            border-radius: 30px;
+            padding: 40px;
+            width: 300px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mission-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(100, 200, 255, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .mission-card:hover::before {
+            opacity: 1;
+        }
+
+        .mission-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: rgba(100, 200, 255, 0.8);
+            animation: glow 2s infinite;
+        }
+
+        .mission-card.active {
+            background: rgba(40, 80, 160, 0.8);
+            border-color: #64b5f6;
+            box-shadow: 0 0 30px rgba(100, 200, 255, 0.5);
+        }
+
+        .mission-card h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: #64b5f6;
+        }
+
+        .mission-card p {
+            color: #b0bec5;
+            line-height: 1.6;
+        }
+
+        .input-section {
+            background: rgba(20, 40, 80, 0.6);
+            border: 2px solid rgba(100, 200, 255, 0.3);
+            border-radius: 30px;
+            padding: 40px;
+            margin: 30px 0;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .input-section h3 {
+            color: #64b5f6;
+            margin-bottom: 30px;
+            font-size: 1.8em;
+            text-align: center;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .feature-input {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feature-input label {
+            color: #90caf9;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feature-icon {
+            display: inline-flex;
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #64b5f6, #42a5f5);
+            border-radius: 8px;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            flex-shrink: 0;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .feature-input input {
+            background: rgba(10, 20, 40, 0.9);
+            border: 2px solid rgba(100, 200, 255, 0.2);
+            border-radius: 20px;
+            padding: 16px 20px;
+            color: #fff;
+            font-size: 1em;
+            width: 100%;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .feature-input input:focus {
+            border-color: #64b5f6;
+            box-shadow: 0 0 20px rgba(100, 200, 255, 0.3);
+            background: rgba(20, 40, 80, 0.9);
+            transform: scale(1.02);
+        }
+
+        .feature-input input:valid {
+            border-color: rgba(76, 175, 80, 0.5);
+        }
+
+        .input-unit {
+            position: absolute;
+            right: 20px;
+            color: #64b5f6;
+            font-size: 0.85em;
+            pointer-events: none;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #1976d2, #42a5f5);
+            border: none;
+            border-radius: 30px;
+            padding: 18px 45px;
+            color: white;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(100, 200, 255, 0.5);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #424242, #616161);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .consensus-box {
+            background: linear-gradient(135deg, rgba(40, 80, 160, 0.8), rgba(20, 40, 80, 0.8));
+            border: 2px solid rgba(100, 200, 255, 0.5);
+            border-radius: 30px;
+            padding: 40px;
+            margin-bottom: 30px;
+            text-align: center;
+            animation: glow 3s infinite;
+        }
+
+        .consensus-box h3 {
+            font-size: 2em;
+            margin-bottom: 15px;
+            color: #64b5f6;
+        }
+
+        .prediction-result {
+            font-size: 3em;
+            font-weight: bold;
+            margin: 20px 0;
+            text-transform: uppercase;
+        }
+
+        .prediction-result.planet {
+            color: #4caf50;
+            text-shadow: 0 0 20px rgba(76, 175, 80, 0.8);
+        }
+
+        .prediction-result.not-planet {
+            color: #f44336;
+            text-shadow: 0 0 20px rgba(244, 67, 54, 0.8);
+        }
+
+        .confidence-bar {
+            width: 100%;
+            height: 30px;
+            background: rgba(10, 20, 40, 0.8);
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4caf50, #8bc34a);
+            transition: width 1s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .models-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .model-card {
+            background: rgba(20, 40, 80, 0.6);
+            border: 2px solid rgba(100, 200, 255, 0.3);
+            border-radius: 20px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .model-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(100, 200, 255, 0.6);
+        }
+
+        .model-card.prediction-planet {
+            border-color: rgba(76, 175, 80, 0.6);
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        .model-card.prediction-not-planet {
+            border-color: rgba(244, 67, 54, 0.6);
+            background: rgba(244, 67, 54, 0.1);
+        }
+
+        .model-name {
+            font-size: 1.2em;
+            color: #64b5f6;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .model-prediction {
+            font-size: 1.1em;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .model-prediction.planet {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+        }
+
+        .model-prediction.not-planet {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+        }
+
+        .confidence-text {
+            color: #90caf9;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid rgba(100, 200, 255, 0.2);
+            border-top: 4px solid #64b5f6;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        .file-upload-section {
+            border: 2px dashed rgba(100, 200, 255, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            margin: 30px 0;
+            background: rgba(10, 20, 40, 0.5);
+        }
+
+        .file-upload-section:hover {
+            border-color: #64b5f6;
+            background: rgba(100, 200, 255, 0.05);
+        }
+
+        .file-upload-section input[type="file"] {
+            display: none;
+        }
+
+        .file-upload-title {
+            font-size: 1.4em;
+            color: #64b5f6;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .file-upload-area {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #1976d2, #42a5f5);
+            border-radius: 25px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px 0;
+        }
+
+        .file-upload-area:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(25, 118, 210, 0.5);
+        }
+
+        .template-download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #4caf50, #66bb6a);
+            border-radius: 20px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 1em;
+        }
+
+        .template-download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.5);
+        }
+
+        .file-upload-hint {
+            font-size: 0.9em;
+            color: #90caf9;
+            margin-top: 15px;
+        }
+
+        .info-card {
+            background: rgba(20, 40, 80, 0.6);
+            border: 2px solid rgba(100, 200, 255, 0.2);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            min-width: 150px;
+        }
+
+        .info-card .label {
+            color: #90caf9;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+
+        .info-card .value {
+            color: #fff;
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .error-message {
+            background: rgba(244, 67, 54, 0.2);
+            border: 2px solid rgba(244, 67, 54, 0.5);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+            color: #ff5252;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .success-message {
+            background: rgba(76, 175, 80, 0.2);
+            border: 2px solid rgba(76, 175, 80, 0.5);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+            color: #69f0ae;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .mission-card {
+                width: 100%;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="space-bg"></div>
+    <div class="stars" id="stars"></div>
+
+    <header>
+        <div class="header-content">
+            <div>
+                <h1>Exoplanet Classification System</h1>
+                <p class="subtitle">Advanced AI-Powered Planet Detection</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="mission-select">
+            <div class="mission-card" data-mission="KEPLER" onclick="selectMission('KEPLER')">
+                <h2>KEPLER</h2>
+                <p>NASA's Kepler Space Telescope mission for discovering Earth-like planets orbiting other stars.</p>
+                <p style="margin-top: 10px; font-size: 0.9em; color: #64b5f6;">11 Features</p>
+            </div>
+            <div class="mission-card" data-mission="K2" onclick="selectMission('K2')">
+                <h2>K2</h2>
+                <p>Extended Kepler mission (K2) surveying a wider field of view for exoplanet candidates.</p>
+                <p style="margin-top: 10px; font-size: 0.9em; color: #64b5f6;">10 Features</p>
+            </div>
+        </section>
+
+        <div id="messageArea"></div>
+
+        <section id="inputSection" class="input-section hidden">
+            <h3>Enter Celestial Object Parameters</h3>
+            <div id="featureInputs" class="feature-grid"></div>
+            
+            <div class="btn-group">
+                <button class="btn" onclick="predictAll()">Classify with All Models</button>
+                <button class="btn btn-secondary" onclick="fillSampleData()">Load Sample Data</button>
+                <button class="btn btn-secondary" onclick="clearInputs()">Clear</button>
+            </div>
+
+            <div class="file-upload-section">
+                <div class="file-upload-title">Batch Prediction from CSV</div>
+                <input type="file" id="csvFile" accept=".csv" onchange="handleFileUpload(event)">
+                <div class="file-upload-area" onclick="document.getElementById('csvFile').click()">
+                    <span>📁</span>
+                    <span>Select CSV File</span>
+                </div>
+                <!-- <button class="template-download-btn" onclick="downloadTemplate()">
+                    <span>⬇️</span>
+                    <span>Download CSV Template</span>
+                </button> -->
+                <p class="file-upload-hint">Download the template, fill it with your data, then upload for batch predictions</p>
+            </div>
+        </section>
+
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p style="color: #64b5f6; font-size: 1.2em;">Analyzing with all models...</p>
+        </div>
+
+        <section id="resultsSection" class="results-section hidden">
+            <div class="consensus-box">
+                <h3>Ensemble Consensus</h3>
+                <div id="consensusResult" class="prediction-result"></div>
+                <div class="confidence-bar">
+                    <div id="confidenceBar" class="confidence-fill"></div>
+                </div>
+                <p id="votesInfo" style="color: #90caf9; font-size: 1.1em;"></p>
+            </div>
+
+            <h3 style="color: #64b5f6; margin: 30px 0 20px;">Individual Model Predictions</h3>
+            <div id="modelsGrid" class="models-grid"></div>
+        </section>
+
+        <section id="batchResultsSection" class="input-section hidden">
+            <h3 style="text-align: center; margin-bottom: 30px;">Batch Prediction Results</h3>
+            <div id="batchSummary" style="text-align: center; margin-bottom: 30px;"></div>
+            <div id="batchResultsGrid" class="models-grid"></div>
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn btn-secondary" onclick="downloadBatchJSON()">Download Full Results (JSON)</button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        let currentMission = null;
+        let batchResultsData = null;
+        const API_BASE = 'http://localhost:8000/api';
+
+        const FEATURE_LABELS = {
+            'KEPLER': {
+                'koi_period': { label: 'Orbital Period', icon: '🔄', unit: 'days' },
+                'koi_duration': { label: 'Transit Duration', icon: '⏱️', unit: 'hours' },
+                'koi_depth': { label: 'Transit Depth', icon: '📉', unit: 'ppm' },
+                'koi_prad': { label: 'Planetary Radius', icon: '🌍', unit: 'R⊕' },
+                'koi_teq': { label: 'Equilibrium Temperature', icon: '🌡️', unit: 'K' },
+                'koi_steff': { label: 'Stellar Temperature', icon: '⭐', unit: 'K' },
+                'koi_slogg': { label: 'Stellar Gravity', icon: '🔬', unit: 'log g' },
+                'koi_srad': { label: 'Stellar Radius', icon: '☀️', unit: 'R☉' },
+                'koi_model_snr': { label: 'Signal-to-Noise', icon: '📊', unit: '' },
+                'koi_tce_plnt_num': { label: 'Planet Number', icon: '#️⃣', unit: '' },
+                'koi_score': { label: 'Disposition Score', icon: '💯', unit: '' }
+            },
+            'K2': {
+                'pl_orbper': { label: 'Orbital Period', icon: '🔄', unit: 'days' },
+                'pl_rade': { label: 'Planet Radius', icon: '🌍', unit: 'R⊕' },
+                'pl_bmasse': { label: 'Planet Mass', icon: '⚖️', unit: 'M⊕' },
+                'pl_eqt': { label: 'Equilibrium Temp', icon: '🌡️', unit: 'K' },
+                'st_teff': { label: 'Stellar Temperature', icon: '⭐', unit: 'K' },
+                'st_logg': { label: 'Stellar Gravity', icon: '🔬', unit: 'log g' },
+                'st_rad': { label: 'Stellar Radius', icon: '☀️', unit: 'R☉' },
+                'st_mass': { label: 'Stellar Mass', icon: '⚖️', unit: 'M☉' },
+                'sy_pnum': { label: 'Number of Planets', icon: '🪐', unit: '' },
+                'sy_snum': { label: 'Number of Stars', icon: '✨', unit: '' }
+            }
+        };
+
+        const SAMPLE_DATA = {
+            'KEPLER': {
+                'koi_period': 3.52, 'koi_duration': 2.5, 'koi_depth': 500,
+                'koi_prad': 1.2, 'koi_teq': 800, 'koi_steff': 5700,
+                'koi_slogg': 4.5, 'koi_srad': 1.0, 'koi_model_snr': 15,
+                'koi_tce_plnt_num': 1, 'koi_score': 0.9
+            },
+            'K2': {
+                'pl_orbper': 10.5, 'pl_rade': 2.1, 'pl_bmasse': 5.2,
+                'pl_eqt': 650, 'st_teff': 5500, 'st_logg': 4.3,
+                'st_rad': 1.1, 'st_mass': 1.0, 'sy_pnum': 1, 'sy_snum': 1
+            }
+        };
+
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 200; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        function showMessage(message, type = 'error') {
+            const messageArea = document.getElementById('messageArea');
+            messageArea.innerHTML = `<div class="${type}-message">${message}</div>`;
+            setTimeout(() => {
+                messageArea.innerHTML = '';
+            }, 5000);
+        }
+
+        function selectMission(mission) {
+            currentMission = mission;
+            
+            document.querySelectorAll('.mission-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            document.querySelector(`[data-mission="${mission}"]`).classList.add('active');
+            
+            document.getElementById('inputSection').classList.remove('hidden');
+            document.getElementById('resultsSection').classList.add('hidden');
+            
+            generateInputFields(mission);
+            document.getElementById('inputSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function generateInputFields(mission) {
+            const container = document.getElementById('featureInputs');
+            container.innerHTML = '';
+            
+            const features = FEATURE_LABELS[mission];
+            
+            Object.keys(features).forEach(key => {
+                const feature = features[key];
+                const div = document.createElement('div');
+                div.className = 'feature-input';
+                div.innerHTML = `
+                    <label for="${key}">
+                        <span class="feature-icon">${feature.icon}</span>
+                        ${feature.label}
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="number" id="${key}" step="any" placeholder="Enter value" required>
+                        ${feature.unit ? `<span class="input-unit">${feature.unit}</span>` : ''}
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function fillSampleData() {
+            if (!currentMission) return;
+            
+            const sampleData = SAMPLE_DATA[currentMission];
+            Object.keys(sampleData).forEach(key => {
+                const input = document.getElementById(key);
+                if (input) input.value = sampleData[key];
+            });
+            showMessage('Sample data loaded successfully!', 'success');
+        }
+
+        function clearInputs() {
+            document.querySelectorAll('.feature-input input').forEach(input => {
+                input.value = '';
+            });
+        }
+
+        function getInputData() {
+            const data = {};
+            const features = Object.keys(FEATURE_LABELS[currentMission]);
+            
+            for (const feature of features) {
+                const input = document.getElementById(feature);
+                if (!input.value) {
+                    showMessage(`Please enter a value for ${FEATURE_LABELS[currentMission][feature].label}`);
+                    return null;
+                }
+                data[feature] = parseFloat(input.value);
+            }
+            
+            return data;
+        }
+
+        async function downloadTemplate() {
+            if (!currentMission) {
+                showMessage('Please select a mission first');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/datasets/${currentMission}/template`);
+                
+                if (!response.ok) throw new Error('Failed to download template');
+                
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${currentMission}_template.csv`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                showMessage('Template downloaded successfully!', 'success');
+            } catch (error) {
+                showMessage('Error downloading template: ' + error.message);
+            }
+        }
+
+        async function predictAll() {
+            if (!currentMission) {
+                showMessage('Please select a mission first');
+                return;
+            }
+            
+            const inputData = getInputData();
+            if (!inputData) return;
+            
+            document.getElementById('loading').classList.add('active');
+            document.getElementById('resultsSection').classList.add('hidden');
+            
+            try {
+                const response = await fetch(`${API_BASE}/predict-all/${currentMission}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(inputData)
+                });
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Prediction failed');
+                }
+                
+                const result = await response.json();
+                displayResults(result);
+                
+            } catch (error) {
+                showMessage('Error: ' + error.message);
+            } finally {
+                document.getElementById('loading').classList.remove('active');
+            }
+        }
+
+        function displayResults(result) {
+            const consensusDiv = document.getElementById('consensusResult');
+            const isPlanet = result.consensus.prediction === 1;
+            
+            consensusDiv.textContent = result.consensus.prediction_label;
+            consensusDiv.className = 'prediction-result ' + (isPlanet ? 'planet' : 'not-planet');
+            
+            const confidence = (result.consensus.confidence * 100).toFixed(1);
+            const confidenceBar = document.getElementById('confidenceBar');
+            confidenceBar.style.width = confidence + '%';
+            confidenceBar.textContent = confidence + '%';
+            
+            document.getElementById('votesInfo').textContent = 
+                `${result.consensus.votes_planet} models predict PLANET | ${result.consensus.votes_not_planet} predict NOT A PLANET`;
+            
+            const modelsGrid = document.getElementById('modelsGrid');
+            modelsGrid.innerHTML = '';
+            
+            result.results.forEach(model => {
+                const card = document.createElement('div');
+                
+                if (model.error || model.prediction_label === 'ERROR') {
+                    card.className = 'model-card';
+                    card.style.borderColor = 'rgba(255, 152, 0, 0.6)';
+                    card.style.background = 'rgba(255, 152, 0, 0.1)';
+                    card.innerHTML = `
+                        <div class="model-name">${model.model.replace(/_/g, ' ')}</div>
+                        <div class="model-prediction" style="background: rgba(255, 152, 0, 0.2); color: #ff9800;">
+                            ⚠️ MODEL ERROR
+                        </div>
+                        <div class="confidence-text" style="color: #ffb74d;">
+                            ${model.error || 'Prediction failed'}
+                        </div>
+                    `;
+                } else {
+                    const modelIsPlanet = model.prediction === 1;
+                    card.className = 'model-card ' + (modelIsPlanet ? 'prediction-planet' : 'prediction-not-planet');
+                    card.innerHTML = `
+                        <div class="model-name">${model.model.replace(/_/g, ' ')}</div>
+                        <div class="model-prediction ${modelIsPlanet ? 'planet' : 'not-planet'}">
+                            ${model.prediction_label}
+                        </div>
+                        <div class="confidence-text">
+                            Confidence: ${(model.confidence * 100).toFixed(1)}%
+                        </div>
+                    `;
+                }
+                modelsGrid.appendChild(card);
+            });
+            
+            document.getElementById('resultsSection').classList.remove('hidden');
+            document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        async function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file || !currentMission) return;
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            document.getElementById('loading').classList.add('active');
+            document.getElementById('resultsSection').classList.add('hidden');
+            document.getElementById('batchResultsSection').classList.add('hidden');
+            
+            try {
+                const response = await fetch(`${API_BASE}/predict-batch/${currentMission}`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Batch prediction failed');
+                }
+                
+                const result = await response.json();
+                batchResultsData = result;
+                displayBatchResults(result);
+                
+                showMessage(`Batch prediction complete! ${result.total_samples} samples processed.`, 'success');
+                
+            } catch (error) {
+                showMessage('Error: ' + error.message);
+            } finally {
+                document.getElementById('loading').classList.remove('active');
+                event.target.value = '';
+            }
+        }
+
+        function displayBatchResults(result) {
+            // Show summary
+            const summaryDiv = document.getElementById('batchSummary');
+            const totalPlanets = result.results.filter(r => r.consensus.prediction === 1).length;
+            const totalNotPlanets = result.results.filter(r => r.consensus.prediction === 0).length;
+            
+            summaryDiv.innerHTML = `
+                <div style="display: flex; gap: 30px; justify-content: center; flex-wrap: wrap;">
+                    <div class="info-card">
+                        <div class="label">Total Samples</div>
+                        <div class="value">${result.total_samples}</div>
+                    </div>
+                    <div class="info-card" style="border-color: rgba(76, 175, 80, 0.5);">
+                        <div class="label">Predicted Planets</div>
+                        <div class="value" style="color: #4caf50;">${totalPlanets}</div>
+                    </div>
+                    <div class="info-card" style="border-color: rgba(244, 67, 54, 0.5);">
+                        <div class="label">Not Planets</div>
+                        <div class="value" style="color: #f44336;">${totalNotPlanets}</div>
+                    </div>
+                </div>
+            `;
+
+            // Show individual results
+            const gridDiv = document.getElementById('batchResultsGrid');
+            gridDiv.innerHTML = '';
+
+            result.results.forEach((row, idx) => {
+                const isPlanet = row.consensus.prediction === 1;
+                const confidence = (row.consensus.confidence * 100).toFixed(1);
+                
+                const card = document.createElement('div');
+                card.className = 'model-card ' + (isPlanet ? 'prediction-planet' : 'prediction-not-planet');
+                
+                // Get first few features for display
+                const featureKeys = Object.keys(row.original_data).slice(0, 3);
+                const featuresDisplay = featureKeys.map(key => 
+                    `<div style="font-size: 0.85em; color: #90caf9; margin: 3px 0;">
+                        ${key}: ${parseFloat(row.original_data[key]).toFixed(2)}
+                    </div>`
+                ).join('');
+                
+                card.innerHTML = `
+                    <div class="model-name">Sample ${idx + 1}</div>
+                    <div class="model-prediction ${isPlanet ? 'planet' : 'not-planet'}">
+                        ${isPlanet ? 'PLANET' : 'NOT A PLANET'}
+                    </div>
+                    <div class="confidence-text">
+                        Consensus Confidence: ${confidence}%
+                    </div>
+                    <div class="confidence-text">
+                        Votes: ${row.consensus.votes_planet} Planet / ${row.consensus.votes_not_planet} Not Planet
+                    </div>
+                    <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(100, 200, 255, 0.2);">
+                        ${featuresDisplay}
+                        ${Object.keys(row.original_data).length > 3 ? '<div style="font-size: 0.8em; color: #64b5f6; margin-top: 5px;">+ more features...</div>' : ''}
+                    </div>
+                `;
+                
+                gridDiv.appendChild(card);
+            });
+
+            document.getElementById('batchResultsSection').classList.remove('hidden');
+            document.getElementById('batchResultsSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function downloadBatchJSON() {
+            if (!batchResultsData) return;
+            
+            const blob = new Blob([JSON.stringify(batchResultsData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `batch_predictions_${currentMission}_${Date.now()}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showMessage('Full results downloaded!', 'success');
+        }
+
+        createStars();
+    </script>
+</body>
+</html>

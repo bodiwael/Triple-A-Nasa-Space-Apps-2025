@@ -1,0 +1,63 @@
+{
+    "timestamp": "2025-10-04 03:51:54",
+    "datasets": {
+        "KEPLER": {
+            "features": [
+                "koi_period",
+                "koi_duration",
+                "koi_depth",
+                "koi_prad",
+                "koi_teq",
+                "koi_steff",
+                "koi_slogg",
+                "koi_srad",
+                "koi_model_snr",
+                "koi_tce_plnt_num",
+                "koi_score"
+            ],
+            "n_samples": 9564,
+            "n_features": 11
+        },
+        "TESS": {
+            "features": [
+                "pl_orbper",
+                "pl_trandep",
+                "pl_rade",
+                "pl_eqt",
+                "st_tmag",
+                "st_teff",
+                "st_logg",
+                "st_rad",
+                "pl_tranmid"
+            ],
+            "n_samples": 7699,
+            "n_features": 9
+        },
+        "K2": {
+            "features": [
+                "pl_orbper",
+                "pl_rade",
+                "pl_bmasse",
+                "pl_eqt",
+                "st_teff",
+                "st_logg",
+                "st_rad",
+                "st_mass",
+                "sy_pnum",
+                "sy_snum"
+            ],
+            "n_samples": 4004,
+            "n_features": 10
+        }
+    },
+    "models_trained": [
+        "CatBoost",
+        "XGBoost",
+        "Gradient Boosting",
+        "Random Forest",
+        "LightGBM",
+        "Genesis CNN",
+        "Simple MLP",
+        "CNN-LSTM"
+    ]
+}
