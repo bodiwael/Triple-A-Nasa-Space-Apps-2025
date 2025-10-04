@@ -26,6 +26,12 @@ AI-powered exoplanet candidate classification with a **FastAPI** backend and a *
 * [Acknowledgments & License](#acknowledgments--license)
 
 ---
+## Demo
+
+
+https://github.com/user-attachments/assets/91c23c21-8135-4c92-bb1c-87dc562daf82
+
+
 
 ## Abstract
 
