@@ -1,3 +1,4 @@
+![Challenge Image](https://github.com/bodiwael/Triple-A-Nasa-Space-Apps-2025/blob/main/challenge.png)
 # Exoplanet Classification System
 
 AI-powered exoplanet candidate classification with a **FastAPI** backend and a **vanilla HTML/JS** frontend. It supports **single** and **batch** predictions, **ensemble consensus**, downloadable **CSV templates**, and a sleek, animated UI.
