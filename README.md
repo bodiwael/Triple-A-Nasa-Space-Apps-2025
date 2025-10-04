@@ -26,13 +26,6 @@ AI-powered exoplanet candidate classification with a **FastAPI** backend and a *
 * [Acknowledgments & License](#acknowledgments--license)
 
 ---
-## Demo
-
-
-https://github.com/user-attachments/assets/91c23c21-8135-4c92-bb1c-87dc562daf82
-
-
-
 ## Abstract
 
 A World Away: AI-Powered Exoplanet Insights Platform
@@ -57,6 +50,8 @@ We present an intelligent, end-to-end platform that converts NASA’s complex ex
 ---
 
 ## Demo & Overview
+
+https://github.com/user-attachments/assets/91c23c21-8135-4c92-bb1c-87dc562daf82
 
 * **Frontend:** `index.html` (no build tools required).
 * **Backend:** `main.py` (FastAPI).
@@ -172,6 +167,10 @@ The backend loads models **on demand** and caches them. It expects:
   ```
 
 > **Important:** The **filename prefix** must exactly match the `AVAILABLE_MODELS` entries in `main.py`. If you add/remove models, update `AVAILABLE_MODELS` accordingly.
+---
+## Results
+<img width="4461" height="3564" alt="random_forest_evaluation" src="https://github.com/user-attachments/assets/5f90849d-3b69-44fe-86bb-eb4003944fe0" />
+
 
 ---
 
